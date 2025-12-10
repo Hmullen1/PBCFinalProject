@@ -9,26 +9,26 @@ function App() {
     const [danceability, setDanceability] = useState(0.5);
     const [acousticness, setAcousticness] = useState(0.5);
     const [energy, setEnergy] = useState(0.5);
-    const [instrumentalness, setInstrumentalness] = useState(0.5);
-    const [liveness, setLiveness] = useState(0.5);
     const [loudness, setLoudness] = useState(0.5);
     const [speechiness, setSpeechiness] = useState(0.5);
-    const [tempo, setTempo] = useState(0.5);
+    const [artistInput, setArtistInput] = useState("");
 
+    
     const handleGenerate = () => {
-       
-        console.log("Generating recommendations with features:");
-        console.log({
-            danceability: danceability,
-            acousticness: acousticness,
-            energy: energy,
-            instrumentalness: instrumentalness,
-            liveness: liveness,
-            loudness: loudness,
-            speechiness: speechiness,
-            tempo: tempo
-        });
-    };
+      const dataArray = [
+      `Artist: ${artistInput}`,
+      `Danceability: ${danceability}`,
+      `Acousticness: ${acousticness}`,
+      `Energy: ${energy}`,
+      `Loudness: ${loudness}`,
+      `Speechiness: ${speechiness}`
+    ];
+
+    console.log(dataArray); 
+  };
+  
+    
+
 
 
 
@@ -40,6 +40,18 @@ function App() {
         </p>
       <header className="App-header">
         <img src={spotifyLogo} className="App-logo" alt="logo" />
+
+
+
+  <div className="artist-input-block">
+  <input
+    type="text"
+    placeholder="Enter artist name..."
+    value={artistInput}
+    onChange={(e) => setArtistInput(e.target.value)}
+    className="artist-input"
+  />
+</div>
         
   <div className="sliders-container"> 
 
@@ -93,36 +105,7 @@ function App() {
   />
 </div>
 
-<div className="feature-block">
-  <div className="feature-pill">Instrumentalness</div>
-  <div className="feature-value">{instrumentalness}</div>
-  <input
-    type="range"
-    min="0"
-    max="1"
-    step="0.01"
-    value={instrumentalness}
-    onChange={(e) => setInstrumentalness(e.target.value)}
-    className="feature-slider"
-  />
-</div>
 
-</div>
-
-<div className="sliders-container"> 
-<div className="feature-block">
-  <div className="feature-pill">Liveness</div>
-  <div className="feature-value">{liveness}</div>
-  <input
-    type="range"
-    min="0"
-    max="1"
-    step="0.01"
-    value={liveness}
-    onChange={(e) => setLiveness(e.target.value)}
-    className="feature-slider"
-  />
-</div>
 
 <div className="feature-block">
   <div className="feature-pill">Loudness</div>
@@ -152,19 +135,15 @@ function App() {
   />
 </div>
 
-<div className="feature-block">
-  <div className="feature-pill">Tempo</div>
-  <div className="feature-value">{tempo}</div>
-  <input
-    type="range"
-    min="0"
-    max="1"
-    step="0.01"
-    value={tempo}
-    onChange={(e) => setTempo(e.target.value)}
-    className="feature-slider"
-  />
+
+<div className="sliders-container"> 
+
+
+
+
 </div>
+
+
 </div>
 
 <button 

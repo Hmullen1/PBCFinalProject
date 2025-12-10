@@ -17,6 +17,8 @@
 
 header img {
   margin-top: 20px;
+  align-self: flex-start;   
+  margin-left: 640px;
 }
 
 
@@ -99,3 +101,30 @@ header img {
     background-color: #1ed760; 
     box-shadow: 0 0 20px rgba(30, 215, 96, 0.7);
 }
+
+
+
+.artist-input-block {
+    width: 220px;          /* Same width as pills */
+  margin: 20px auto;     /* Center horizontally */
+  text-align: center;    /* Keep the input centered inside */
+  transform: translateX(-20px);  /* adjust this number */
+}
+
+
+.artist-input {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 20px;
+  border: 2px solid #1DB954;   
+  outline: none;
+  background-color: #0f0f0f;   
+  color: white;
+  width:  180px;
+  transition: 0.2s;
+}
+
+.artist-input:focus {
+  border-color: #1ed760;        
+}
+
