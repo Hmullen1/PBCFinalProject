@@ -13,9 +13,19 @@ function App() {
     const [speechiness, setSpeechiness] = useState(0.5);
     const [artistInput, setArtistInput] = useState("");
     const [recommendations, setRecommendations] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [shake, setShake] = useState(false);
+    
 
     
     const handleGenerate = async () => {
+    if (!artistInput.trim()) {
+      setShake(true);
+      setTimeout(() => setShake(false), 500); 
+      return;
+    }
+    setLoading(true);
+    
     const target = {
     danceability: parseFloat(danceability),
     acousticness: parseFloat(acousticness),
@@ -24,16 +34,24 @@ function App() {
     speechiness: parseFloat(speechiness),
   };
 
-  const results = await getSimilarArtistsTopTracks(artistInput, target);
+  try {
+    const results = await getSimilarArtistsTopTracks(artistInput, target);
 
-  setRecommendations(results);
+    if (results.length === 0) {
+      setShake(true);
+      setTimeout(() => setShake(false), 1000);
+      setRecommendations([]);
+    } else {
+      setShake(false);
+      setRecommendations(results);
+    }
+  } catch (err) {
+    console.error("Error fetching recommendations:", err);
+    setRecommendations([]);
+  } finally {
+    setLoading(false);
+  }
 };
-
-
-  
-  
-  
-
 
   return (
 
@@ -52,7 +70,7 @@ function App() {
     placeholder="Enter artist name..."
     value={artistInput}
     onChange={(e) => setArtistInput(e.target.value)}
-    className="artist-input"
+    className={`artist-input ${shake ? 'shake' : ''}`}
   />
 </div>
         
@@ -140,40 +158,35 @@ function App() {
 
 
 <div className="sliders-container"> 
-
-
-
-
 </div>
-
-
 </div>
 
 <button 
   className="generate-button" 
   onClick={handleGenerate}
+  disabled={loading}
 >
-  Generate Recommendations
+  {loading ? <span className="loading-spinner"></span> : "Generate Recommendations"}
 </button>
 
-<div className="results">
-  {recommendations.length > 0 && (
-    <ul>
-      {recommendations.map((r, index) => (
-        <li key={index}>
-          <a href={r.url} target="_blank" rel="noreferrer">
-            {r.artist}
-          </a> — closeness {r.closeness.toFixed(3)}
-        </li>
-      ))}
-    </ul>
-  )}
-</div>
-
-
-  
-
-
+    <div className="results">
+      {recommendations.length > 0 && (
+        <ol className="recommendation-list">
+          {recommendations.map((r, index) => (
+            <li key={index} className="recommendation-item">
+              <a href={r.url} target="_blank" rel="noreferrer" className="recommendation-link">
+                <img src={r.albumImage} alt={`${r.name} album cover`} className="album-cover" />
+                <div className="track-info">
+                  <div className="track-title">{r.name}</div>
+                  <div className="track-artist">{r.artist}</div>
+                  <div className="match-percentage">{r.matchPercent.toFixed(2)}%</div>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ol>
+      )}
+    </div>
       </header>
     </div>
   );
